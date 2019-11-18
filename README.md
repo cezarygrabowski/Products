@@ -1,5 +1,2 @@
-TODO:
-Lista produktów
-Sprawdzenie mojego połączenia do bazy(sprawdż czy baza w ogóle żyje)
-Obczaj ContentProvider
-Zrób Opcje (SharedPreferences)
+Simple application to add, display, modify and delete products.
+In addition to that, we can set our preferences (dark theme, font size) (SharedPreferences)
