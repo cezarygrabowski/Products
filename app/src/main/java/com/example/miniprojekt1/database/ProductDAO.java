@@ -1,11 +1,15 @@
 package com.example.miniprojekt1.database;
 
+import android.database.Cursor;
 import androidx.room.*;
 
 import java.util.List;
 
 @Dao
 public interface ProductDAO {
+    @Query("SELECT * FROM product")
+    Cursor getAllInContentProvider();
+
     @Query("SELECT * FROM product")
     List<Product> getAll();
 
