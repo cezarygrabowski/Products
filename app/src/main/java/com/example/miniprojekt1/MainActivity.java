@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import com.example.miniprojekt1.database.MyDB;
-import com.example.miniprojekt1.database.MyDB_Impl;
 
 public class MainActivity extends AppCompatActivity {
 

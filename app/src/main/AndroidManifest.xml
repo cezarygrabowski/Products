@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.miniprojekt1">
+          xmlns:tools="http://schemas.android.com/tools" package="com.example.miniprojekt1">
+    <permission-group android:name="com.example.my_permissions"
+                      android:label="my permissions group" />
+
+    <permission android:name="com.example.my_permissions.MY_PERMISSION"
+                android:permissionGroup="com.examples.my_permissions"
+                android:label="my permission"/>
+
+    <uses-permission android:name="com.example.my_permissions.MY_PERMISSION" />
 
     <application
             android:allowBackup="true"
@@ -8,7 +16,7 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
         <provider
                 android:name=".database.MyContentProvider"
                 android:authorities="code.example.miniproject1.provider"
@@ -20,7 +28,7 @@
         </activity>
         <activity android:name=".OptionsListActivity">
         </activity>
-        <activity android:name=".ProductListActivity">
+        <activity android:exported="true" android:name=".ProductListActivity"> <!-- Without android:exported="true" you cannot launch this activity from another app-->
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -29,6 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

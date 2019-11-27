@@ -1,21 +1,25 @@
 package com.example.miniprojekt1;
 
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import com.example.miniprojekt1.database.MyDB;
-import com.example.miniprojekt1.database.MyDB_Impl;
 import com.example.miniprojekt1.database.Product;
 
 public class AddProduct extends AppCompatActivity {
-
-    MyDB db;
+    private static final String myIntent = "com.example.product.added";
+    private MyDB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,10 @@ public class AddProduct extends AppCompatActivity {
             product.price = Integer.parseInt(productPrice);
             product.isSold = false;
             db.productDAO().insertAll(product);
+            Intent intent = new Intent(myIntent);
+            intent.putExtra("productName" , productName);
+            sendBroadcast(intent, "com.example.my_permissions.MY_PERMISSION");
+
         } else {
             product.pid = Integer.parseInt(productPid);
             product.amount = Integer.parseInt(productAmount);
@@ -63,7 +71,7 @@ public class AddProduct extends AppCompatActivity {
             product.isSold = false;
             db.productDAO().update(product);
         }
-//        db.close();
+
         finish();
     }
 }

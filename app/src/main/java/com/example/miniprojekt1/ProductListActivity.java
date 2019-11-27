@@ -1,26 +1,23 @@
 package com.example.miniprojekt1;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import com.example.miniprojekt1.database.MyDB;
 import com.example.miniprojekt1.database.Product;
 import com.example.miniprojekt1.product.ListItem;
 import com.example.miniprojekt1.product.MyAdapter;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProductListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
+        Log.i("GIT", "Victory - productList!");
 
         //instantiate custom adapter
         MyAdapter adapter = new MyAdapter(this.getItems(), this);

@@ -1,5 +1,6 @@
 package com.example.miniprojekt1;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.TypedValue;
@@ -9,11 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.List;
-
 public class OptionsListActivity extends AppCompatActivity {
+    private static final String myIntent = "com.example.product.added";
+
     private static final String MY_PREFS_NAME = "MySharedPreferences";
     private static final String DARK_BACKGROUND_TEXT = "dark_background";
     private static final String DARK_BACKGROUND_TEXT_CHECKED = "dark_background_checked";
@@ -21,14 +20,13 @@ public class OptionsListActivity extends AppCompatActivity {
 
     private Switch darkBackgroundSwitch;
     private Spinner fontSizeSpinner;
-    private Button goBackFromOptionsListButton;
     private String[] FONT_SIZE_OPTIONS = new String[]{"13", "20", "25"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options_list);
-        createFontSizeOptions(0);
+                createFontSizeOptions(0);
 
         Button goBackFromProductList = findViewById(R.id.go_back_from_options_list);
         goBackFromProductList.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +71,7 @@ public class OptionsListActivity extends AppCompatActivity {
         darkBackgroundSwitch = (Switch) findViewById(R.id.dark_background_switch);
         darkBackgroundSwitch.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         darkBackgroundSwitch.setChecked(sharedPreferences.getBoolean(DARK_BACKGROUND_TEXT_CHECKED, false));
-        goBackFromOptionsListButton = (Button) findViewById(R.id.go_back_from_options_list);
+        Button goBackFromOptionsListButton = (Button) findViewById(R.id.go_back_from_options_list);
         goBackFromOptionsListButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         fontSizeSpinner = (Spinner) findViewById(R.id.font_size_dropdown);
         for (int i=0; i<FONT_SIZE_OPTIONS.length; i++) {
