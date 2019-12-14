@@ -1,6 +1,7 @@
 package com.example.miniprojekt1.product;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.miniprojekt1.R;
 import com.example.miniprojekt1.database.MyDB;
 import com.example.miniprojekt1.database.Product;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,8 +73,21 @@ public class MyAdapter extends BaseAdapter implements ListAdapter {
             public void onClick(View v) {
                 MyDB db = MyDB.getDatabase(context);
                 ListItem item = list.get(position);
-                Product product = db.productDAO().loadById(item.getPid());
-                db.productDAO().delete(product);
+                FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                firestore.collection("products").document(String.valueOf(item.getPid()))
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("success", "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("error", "Error deleting document", e);
+                            }
+                        });
                 list.remove(position); //or some other task
                 notifyDataSetChanged();
             }

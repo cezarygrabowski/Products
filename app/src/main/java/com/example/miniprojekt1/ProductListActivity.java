@@ -4,28 +4,58 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import com.example.miniprojekt1.database.MyDB;
-import com.example.miniprojekt1.database.Product;
 import com.example.miniprojekt1.product.ListItem;
 import com.example.miniprojekt1.product.MyAdapter;
+import com.google.android.gms.tasks.*;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.*;
+
 import java.util.ArrayList;
 
 public class ProductListActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+    private ArrayList<ListItem> list = new ArrayList<ListItem>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_list);
-        Log.i("GIT", "Victory - productList!");
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-        //instantiate custom adapter
-        MyAdapter adapter = new MyAdapter(this.getItems(), this);
+        firestore.collection("products")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            setContentView(R.layout.activity_product_list);
 
-        //handle listview and assign adapter
-        ListView lView = (ListView)findViewById(R.id.products_recycle_view);
-        lView.setAdapter(adapter);
+                            render(task);
+                        } else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
 
+    private void render(@NonNull Task<QuerySnapshot> task) {
+        for (QueryDocumentSnapshot document : task.getResult()) {
+            Log.d("TAG", document.get("pid") + " => " + document.getData());
+
+            list.add(getListItem(document));
+            MyAdapter adapter = new MyAdapter(list, getApplicationContext());
+
+            //handle listview and assign adapter
+            ListView lView = (ListView)findViewById(R.id.products_recycle_view);
+            lView.setAdapter(adapter);
+
+            addGoBackFromProductListOnClickListener();
+        }
+    }
+
+    private void addGoBackFromProductListOnClickListener() {
         Button goBackFromProductList = findViewById(R.id.go_back_from_product_list);
         goBackFromProductList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,24 +65,17 @@ public class ProductListActivity extends AppCompatActivity {
         });
     }
 
-    private void goBack(View view) {
-        finish();
+    private ListItem getListItem(QueryDocumentSnapshot document) {
+        ListItem item = new ListItem();
+        item.setPid((int) (long) document.get("pid"));
+        item.setAmount((int) (long) document.get("amount"));
+        item.setPrice((int) (long) document.get("price"));
+        item.setName((String) document.get("productName"));
+        item.setSold((Boolean) document.get("isSold"));
+        return item;
     }
 
-    public ArrayList<ListItem> getItems() {
-        ArrayList<ListItem> list = new ArrayList<ListItem>();
-
-        MyDB db = MyDB.getDatabase(getApplicationContext());
-        for (Product product: db.productDAO().getAll()) {
-            ListItem test1 = new ListItem();
-            test1.setPid(product.pid);
-            test1.setAmount(product.amount);
-            test1.setPrice(product.price);
-            test1.setName(product.productName);
-            test1.setSold(product.isSold);
-            list.add(test1);
-        }
-
-        return list;
+    private void goBack(View view) {
+        finish();
     }
 }
