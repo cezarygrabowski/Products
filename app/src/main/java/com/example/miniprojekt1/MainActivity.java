@@ -1,6 +1,7 @@
 package com.example.miniprojekt1;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import com.example.miniprojekt1.database.MyDB;
 import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,8 +31,10 @@ public class MainActivity extends AppCompatActivity {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
+                        .setIsSmartLockEnabled(false)
                         .build(),
                 RC_SIGN_IN);
+
         Button launchProductList = (Button) findViewById(R.id.launch_product_list);
         launchProductList.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -66,7 +66,19 @@ public class AddProduct extends AppCompatActivity {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         firestore.collection("products")
                 .document(productPid)
-                .set(products);
+                .set(products)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error writing document", e);
+                    }
+                });;
         Intent intent = new Intent(myIntent);
         intent.putExtra("productName" , productName);
         sendBroadcast(intent, "com.example.my_permissions.MY_PERMISSION");
